@@ -9,4 +9,5 @@ Here is my own dockerfile for my devContainers
 
 ## List of Containers:
 
-- Debian:13
+- debian:13
+- python:3.14
