@@ -5,7 +5,7 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - "Dockerfile/**"
+      - "Dockerfiles/**"
       - ".github/workflows/ddocker-publish.yml"
   workflow_dispatch:
 
