@@ -1,0 +1,77 @@
+name: Docker Publish
+
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - id: set-matrix
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t DOCKERFILES < <(find Dockerfiles -mindepth 3 -maxdepth 3 -type f -name Dockerfile | sort)
+          if [ ${#DOCKERFILES[@]} -eq 0 ]; then
+            echo "Aucun Dockerfile trouvé sous Dockerfiles/<image>/<tag>/Dockerfile"
+            echo 'matrix={"include":[]}' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          declare -A IMAGE_TAGS
+
+          # 1 Collecte des tags par image
+          for df in "${DOCKERFILES[@]}"; do
+            image="$(echo "$df" | cut -d/ -f2)"
+            tag="$(echo "$df" | cut -d/ -f3)"
+
+            [[ "$tag" == "latest" ]] && continue
+
+            IMAGE_TAGS["$image"]+="$tag"$'\n'
+          done
+
+          # 2 Calcul de la version max par image
+          declare -A MAX_TAG
+          for image in "${!IMAGE_TAGS[@]}"; do
+            MAX_TAG["$image"]="$(echo "${IMAGE_TAGS[$image]}" | sort -V | tail -n1)"
+          done
+
+
+          # 3 Construction de la matrix
+          json='{"include":['
+          first=1
+          for df in "${DOCKERFILES[@]}"; do
+            # df = docker/<image>/<tag>/Dockerfile
+            context="$(dirname "$df")"
+            image="$(echo "$df" | cut -d/ -f2)"
+            tag="$(echo "$df" | cut -d/ -f3)"
+
+            tags="ghcr.io/${GITHUB_REPOSITORY_OWNER}/${image}:${tag}"
+
+            # 4 Si c'est la plus grande version → ajouter latest
+            if [[ "$tag" == "${MAX_TAG[$image]}" ]]; then
+              tags+=$'\n'"ghcr.io/${GITHUB_REPOSITORY_OWNER}/${image}:latest"
+            fi
+
+            if [ $first -eq 0 ]; then json+=",";
+            else first=0; fi
+
+            json+="{\"image\":\"$image\",\"tag\":\"$tag\",\"context\":\"$context\",\"tags\":\"$tags\"}"
+          done
+          json+=']}'
+
+          echo "Matrix: $json"
+          echo "matrix=$json" >> "$GITHUB_OUTPUT"
