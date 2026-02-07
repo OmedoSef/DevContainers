@@ -9,7 +9,9 @@ ARG USER_NAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
-RUN apt-get update && apt-get install -y zsh zplug curl neovim sudo gcc make zlib1g-dev libssl-dev libbz2-dev liblzma-dev libzstd-dev libffi-dev libncursesw5-dev libncursesw5-dev libgdbm-dev uuid-dev libreadline-dev tk-dev  build-essential  libsqlite3-dev libgdbm-compat-dev
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y zsh zplug curl neovim sudo 
 
 # Create the user vscode with sudo access
 RUN groupadd --gid $USER_GID $USER_NAME \
