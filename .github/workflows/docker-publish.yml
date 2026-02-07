@@ -24,6 +24,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          owner_lc="$(echo "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')"
           mapfile -t DOCKERFILES < <(find Dockerfiles -mindepth 3 -maxdepth 3 -type f -name Dockerfile | sort)
           if [ ${#DOCKERFILES[@]} -eq 0 ]; then
             echo "Aucun Dockerfile trouvé sous Dockerfiles/<image>/<tag>/Dockerfile"
@@ -58,12 +59,13 @@ jobs:
             context="$(dirname "$df")"
             image="$(echo "$df" | cut -d/ -f2)"
             tag="$(echo "$df" | cut -d/ -f3)"
+            image_lc="$(echo "$image" | tr '[:upper:]' '[:lower:]')"
 
-            tags="[\"ghcr.io/${GITHUB_REPOSITORY_OWNER}/${image}:${tag}\""
+            tags="[\"ghcr.io/${owner_lc}/${image_lc}:${tag}\""
 
             # 4 Si c'est la plus grande version → ajouter latest
             if [[ "$tag" == "${MAX_TAG[$image]}" ]]; then
-              tags+=$','"\"ghcr.io/${GITHUB_REPOSITORY_OWNER}/${image}:latest\""
+              tags+=$','"\"ghcr.io/${owner_lc}/${image_lc}:latest\""
             fi
 
             tags+="]"
@@ -71,7 +73,7 @@ jobs:
             if [ $first -eq 0 ]; then json+=",";
             else first=0; fi
 
-            json+="{\"image\":\"$image\",\"tag\":\"$tag\",\"context\":\"$context\",\"tags\":$tags}"
+            json+="{\"image\":\"$image_lc\",\"tag\":\"$tag\",\"context\":\"$context\",\"tags\":$tags}"
           done
           json+=']}'
 
