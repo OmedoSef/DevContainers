@@ -62,6 +62,12 @@ RUN ./configure --prefix="${PREFIX}" --with-ensurepip=install \
 # 2) Runtime
 ############################
 FROM ghcr.io/omedosef/debian:13
+
+LABEL maintainer="OmedoSef"
+LABEL org.opencontainers.image.source=https://github.com/OmedoSef/DevContainers
+LABEL org.opencontainers.image.licenses=Apache-2.0
+LABEL org.opencontainers.image.description="A Debian 13-based with python 3.14 development container with zsh"
+
 ARG PYTHON_VERSION
 ARG PREFIX
 
