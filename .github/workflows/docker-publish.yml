@@ -63,7 +63,7 @@ jobs:
 
             # 4 Si c'est la plus grande version → ajouter latest
             if [[ "$tag" == "${MAX_TAG[$image]}" ]]; then
-              tags+=$'\n'"ghcr.io/${GITHUB_REPOSITORY_OWNER}/${image}:latest"
+              tags+=$' '"ghcr.io/${GITHUB_REPOSITORY_OWNER}/${image}:latest"
             fi
 
             if [ $first -eq 0 ]; then json+=",";
