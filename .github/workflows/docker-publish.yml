@@ -59,7 +59,7 @@ jobs:
             image="$(echo "$df" | cut -d/ -f2)"
             tag="$(echo "$df" | cut -d/ -f3)"
 
-            tags="[\"ghcr.io/${GITHUB_REPOSITORY_OWNER}/${image}:${tag}\"
+            tags="[\"ghcr.io/${GITHUB_REPOSITORY_OWNER}/${image}:${tag}\""
 
             # 4 Si c'est la plus grande version → ajouter latest
             if [[ "$tag" == "${MAX_TAG[$image]}" ]]; then
