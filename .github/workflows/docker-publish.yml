@@ -98,4 +98,4 @@ jobs:
         with:
           context: ${{ matrix.context }}
           push: true
-          tags: ${{ matrix.tags }}
+          tags: ${{ join(matrix.tags, '\n') }}
