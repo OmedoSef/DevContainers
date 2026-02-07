@@ -71,7 +71,7 @@ jobs:
             if [ $first -eq 0 ]; then json+=",";
             else first=0; fi
 
-            json+="{\"image\":\"$image\",\"tag\":\"$tag\",\"context\":\"$context\",\"tags\":\"$tags\"}"
+            json+="{\"image\":\"$image\",\"tag\":\"$tag\",\"context\":\"$context\",\"tags\":$tags}"
           done
           json+=']}'
 
