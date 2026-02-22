@@ -8,6 +8,8 @@ on:
       - "Dockerfiles/**"
       - ".github/workflows/ddocker-publish.yml"
   workflow_dispatch:
+  schedule:
+     - cron: "0 1 1 * *"
 
 permissions:
   contents: read

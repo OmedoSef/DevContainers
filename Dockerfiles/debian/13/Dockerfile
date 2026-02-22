@@ -11,7 +11,7 @@ ARG USER_GID=$USER_UID
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y zsh zplug curl neovim sudo 
+RUN apt-get update && apt-get install -y zsh zplug curl neovim sudo unzip
 
 # Create the user vscode with sudo access
 RUN groupadd --gid $USER_GID $USER_NAME \
