@@ -16,10 +16,8 @@ RUN apt-get update && apt-get install -y zsh zplug curl neovim sudo unzip locale
 
 # Set the desired locale
 ENV LANG C.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
 
-RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales
+RUN locale-gen C.UTF-8 && dpkg-reconfigure locales
 
 # Create the user vscode with sudo access
 RUN groupadd --gid $USER_GID $USER_NAME \
