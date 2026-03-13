@@ -9,4 +9,5 @@ LABEL org.opencontainers.image.description="A Debian 13-based with Rust developm
 ENV RUST_VERSION=1.94
 
 
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -q -y --default-toolchain ${RUST_VERSION}
+RUN sudo apt update && sudo apt install -y build-essential \
+    && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -q -y --default-toolchain ${RUST_VERSION}
