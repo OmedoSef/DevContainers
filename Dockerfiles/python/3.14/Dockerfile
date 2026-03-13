@@ -3,11 +3,6 @@ ARG PREFIX=/opt/python/${PYTHON_VERSION}
 
 FROM ghcr.io/omedosef/debian:13 AS builder
 
-LABEL maintainer="OmedoSef"
-LABEL org.opencontainers.image.source=https://github.com/OmedoSef/DevContainers
-LABEL org.opencontainers.image.licenses=Apache-2.0
-LABEL org.opencontainers.image.description="A Debian 13-based development container with zsh"
-
 ARG PYTHON_VERSION
 ARG PREFIX
 
